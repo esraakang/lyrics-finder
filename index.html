@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎤 Lyricify by Esra</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #111, #333);
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      width: 250px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ff4081;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #ff1c65;
+    }
+    .lyrics-box {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #222;
+      border-radius: 10px;
+      max-width: 500px;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+    .hidden {
+      display: none;
+    }
+    a.youtube-link {
+      color: #ff4081;
+      margin-top: 10px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎶 Welcome to Lyricify 🎶</h1>
+  <input type="text" id="artist" placeholder="Enter artist name">
+  <input type="text" id="song" placeholder="Enter song title">
+  <br>
+  <button onclick="fetchLyrics()">Get Lyrics</button>
+
+  <div class="lyrics-box hidden" id="lyrics-box">
+    <h3 id="song-title"></h3>
+    <p id="lyrics"></p>
+    <a class="youtube-link" id="youtube-link" href="#" target="_blank">🔎 Search on YouTube</a>
+  </div>
+
+  <script>
+    async function fetchLyrics() {
+      const artist = document.getElementById('artist').value.trim();
+      const song = document.getElementById('song').value.trim();
+      const lyricsBox = document.getElementById('lyrics-box');
+      const lyricsEl = document.getElementById('lyrics');
+      const titleEl = document.getElementById('song-title');
+      const youtubeLink = document.getElementById('youtube-link');
+
+      if (!artist || !song) {
+        lyricsBox.classList.remove('hidden');
+        titleEl.innerText = '⚠️ Uyarı';
+        lyricsEl.innerText = 'Sanatçı ve şarkı ismini gir tatlım 😎';
+        youtubeLink.style.display = 'none';
+        return;
+      }
+
+      // Rickroll Easter Egg 😏
+      if (artist.toLowerCase() === 'rick astley') {
+        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank');
+        return;
+      }
+
+      lyricsBox.classList.remove('hidden');
+      titleEl.innerText = `${artist} - ${song}`;
+      lyricsEl.innerText = '⏳ Yükleniyor...';
+      youtubeLink.href = `https://www.youtube.com/results?search_query=${artist}+${song}`;
+      youtubeLink.style.display = 'inline-block';
+
+      try {
+        const response = await fetch(`https://api.lyrics.ovh/v1/${artist}/${song}`);
+        const data = await response.json();
+
+        if (data.lyrics) {
+          lyricsEl.innerText = data.lyrics;
+        } else {
+          lyricsEl.innerText = '🙁 Şarkı sözleri bulunamadı.';
+        }
+      } catch (error) {
+        lyricsEl.innerText = '❌ Bir hata oluştu. İnternetin mi gitti acaba?';
+      }
+    }
+  </script>
+</body>
+</html>
