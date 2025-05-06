@@ -1,5 +1,3 @@
-<!-- README-like açıklama -->
-<!--
 # Lyricify 🎧
 
 A simple yet charming lyrics search web app built by Esra Kanğ. 
@@ -25,4 +23,3 @@ This project allows users to enter an artist and song title to fetch lyrics usin
 
 ## ✨ Author
 Created with 💖 by **Esra Kanğ**
--->
